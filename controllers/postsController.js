@@ -1,77 +1,54 @@
-const fs = require('fs');
-const path = require('path');
+const postsService = require('../services/postsService');
 
-const postsFilePath = path.join(__dirname, '..', 'posts.json');
-
-function readPostsFromFile() {
+const createPost = async (req, res) => {
   try {
-    const postsData = fs.readFileSync(postsFilePath);
-    return JSON.parse(postsData);
+    const post = await postsService.createPost(req.body);
+    res.status(201).send({ message: 'Post created', post });
   } catch (error) {
-    return [];
+    res.status(400).send(error.message);
   }
-}
-
-function writePostsToFile(posts) {
-  fs.writeFileSync(postsFilePath, JSON.stringify(posts, null, 2), 'utf8');
-}
-
-exports.createPost = (req, res) => {
-  const { date, title, body, uuid } = req.body;
-  if (!date || !title || !body || !uuid) {
-    return res.status(400).send('Missing required fields');
-  }
-
-  const posts = readPostsFromFile();
-  posts.push({ date, title, body, uuid });
-  writePostsToFile(posts);
-
-  res.status(201).send({ message: 'Post created', post: { date, title, body, uuid } });
 };
 
-exports.getAllPosts = (req, res) => {
-  const posts = readPostsFromFile();
-  res.status(200).send(posts);
+const getAllPosts = async (req, res) => {
+  try {
+    const posts = await postsService.getAllPosts();
+    res.status(200).send(posts);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 };
 
-exports.getPostByUUID = (req, res) => {
-  const { uuid } = req.params;
-  const posts = readPostsFromFile();
-  const post = posts.find(p => p.uuid === uuid);
-
-  if (!post) {
-    return res.status(404).send('Post not found');
+const getPostByUUID = async (req, res) => {
+  try {
+    const post = await postsService.getPostByUUID(req.params.uuid);
+    res.status(200).send(post);
+  } catch (error) {
+    res.status(404).send(error.message);
   }
-
-  res.status(200).send(post);
 };
 
-exports.updatePost = (req, res) => {
-  const { uuid } = req.params;
-  let posts = readPostsFromFile();
-  const postIndex = posts.findIndex(p => p.uuid === uuid);
-
-  if (postIndex === -1) {
-    return res.status(404).send('Post not found');
+const updatePost = async (req, res) => {
+  try {
+    const updatedPost = await postsService.updatePost(req.params.uuid, req.body);
+    res.status(200).send(updatedPost);
+  } catch (error) {
+    res.status(404).send(error.message);
   }
-
-  posts[postIndex] = { ...posts[postIndex], ...req.body };
-  writePostsToFile(posts);
-
-  res.status(200).send(posts[postIndex]);
 };
 
-exports.deletePost = (req, res) => {
-  const { uuid } = req.params;
-  let posts = readPostsFromFile();
-  const postIndex = posts.findIndex(p => p.uuid === uuid);
-
-  if (postIndex === -1) {
-    return res.status(404).send('Post not found');
+const deletePost = async (req, res) => {
+  try {
+    await postsService.deletePost(req.params.uuid);
+    res.status(204).send();
+  } catch (error) {
+    res.status(404).send(error.message);
   }
+};
 
-  posts.splice(postIndex, 1);
-  writePostsToFile(posts);
-
-  res.status(204).send();
+module.exports = {
+  createPost,
+  getAllPosts,
+  getPostByUUID,
+  updatePost,
+  deletePost,
 };

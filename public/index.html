@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog Post Manager</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <div id="user-info">
+    <span id="username-display"></span>
+    <button id="logout-button">Logout</button>
+  </div>
+
+  <div class="container">
+    <h1>Blog Post Manager</h1>
+
+    <!-- Create Post Form -->
+    <h2>Create Post</h2>
+    <form id="createPostForm" class="post-form">
+      <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label for="body">Body:</label>
+        <textarea id="body" name="body" rows="5" required></textarea>
+      </div>
+      <input type="submit" value="Create Post">
+    </form>
+
+    <hr>
+
+    <!-- Update Post Form (Initially hidden) -->
+    <h2>Update Post</h2>
+    <form id="updatePostForm" class="post-form" style="display:none;">
+      <input type="hidden" id="updateUuid">
+      <div class="form-group">
+        <label for="updateTitle">Title:</label>
+        <input type="text" id="updateTitle" name="title" required>
+      </div>
+      <div class="form-group">
+        <label for="updateBody">Body:</label>
+        <textarea id="updateBody" name="body" rows="5" required></textarea>
+      </div>
+      <input type="submit" value="Update Post">
+      <button type="button" class="cancel-button" onclick="cancelUpdate()">Cancel</button>
+    </form>
+
+    <hr>
+
+    <!-- Posts List -->
+    <h2>Posts</h2>
+    <div id="posts" class="posts-list"></div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+
+</html>
+
+<template id="post-template">
+  <div class="post">
+    <div class="post-content">
+      <h3></h3>
+      <p></p>
+      <button class="edit">Edit</button>
+      <button class="delete">Delete</button>
+    </div>
+    <div class="edit-form" style="display: none;">
+      <form>
+        <input type="hidden" class="uuid">
+        <div class="form-group">
+          <label for="updateTitle">Title</label>
+          <input type="text" class="updateTitle">
+        </div>
+        <div class="form-group">
+          <label for="updateBody">Body</label>
+          <textarea class="updateBody"></textarea>
+        </div>
+        <input type="submit" value="Update">
+        <button type="button" class="cancel">Cancel</button>
+      </form>
+    </div>
+  </div>
+</template>
