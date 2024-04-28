@@ -48,6 +48,8 @@ function submitUser(url, user) {
     .then(response => {
         if (response.ok) {
             return response.json();
+        } else if (response.status === 401) {
+            window.location.href = '/client/public/login.html';
         } else {
             console.log(response);
             throw new Error('Server response was not ok.');

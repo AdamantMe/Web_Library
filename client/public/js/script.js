@@ -23,38 +23,48 @@ document.getElementById('updatePostForm').addEventListener('submit', function (e
 });
 
 function submitPost(url, method, data) {
+    const token = localStorage.getItem('token');
     fetch(API_BASE_URL + url, {
         method: method,
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(data)
     })
-        .then(response => response.json())
-        .then(data => {
-            if (method === 'POST') {
-                addPostToDOM(data);
-            } else if (method === 'PUT') {
-                updatePostInDOM(data);
-            }
-        })
-        .catch(error => console.error('Error:', error));
+    .then(response => response.json())
+    .then(data => {
+        if (method === 'POST') {
+            addPostToDOM(data);
+        } else if (method === 'PUT') {
+            updatePostInDOM(data);
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 function getPosts() {
-    console.trace('getPosts called');
-    fetch(API_BASE_URL + '/posts')
-        .then(response => {
-            return response.json(); 
-        })
-        .then(posts => {
-            const postsContainer = document.getElementById('posts');
-            postsContainer.innerHTML = ''; 
-            console.log(posts);
-            posts.forEach(post => {
-                addPostToDOM(post);
-            });
+    
+    const token = localStorage.getItem('token');    
+    fetch(API_BASE_URL + '/posts', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); 
+    })
+    .then(posts => {
+        const postsContainer = document.getElementById('posts');
+        postsContainer.innerHTML = ''; 
+        console.log(posts);
+        posts.forEach(post => {
+            addPostToDOM(post);
         });
+    });
 }
 
 function addPostToDOM(post) {
@@ -143,8 +153,6 @@ function refreshUserAndPosts() {
 }
 
 window.onload = function () {
-    refreshUserAndPosts();
-
     if (!localStorage.getItem('token')) {
         window.location.href = '/client/public/login.html';
     }
@@ -153,15 +161,30 @@ window.onload = function () {
     if (token && token.split('.').length === 3) {
         const payload = JSON.parse(atob(token.split('.')[1]));
         document.getElementById('username-display').textContent = `Logged in as ${payload.username}`;
-
-        // Fetch the posts from the server
-        getPosts();
     }
+
+    refreshUserAndPosts();
 
     // Handle the logout button click
     document.getElementById('logout-button').addEventListener('click', function () {
         console.log('Logging out');
         localStorage.removeItem('token');
         window.location.href = '/client/public/login.html';
+    });
+
+    const theme = localStorage.getItem('theme');
+    if (theme) {
+        document.body.className = theme;
+    }
+
+    // Handle the theme switch button click
+    document.getElementById('theme-button').addEventListener('click', function () {
+        if (document.body.className === 'dark-theme') {
+            document.body.className = '';
+            localStorage.setItem('theme', '');
+        } else {
+            document.body.className = 'dark-theme';
+            localStorage.setItem('theme', 'dark-theme');
+        }
     });
 };

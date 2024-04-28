@@ -14,7 +14,7 @@ exports.loginUser = async (username, password) => {
   if (!validPassword) {
     throw new Error('Invalid username or password');
   }
-  const token = jwt.sign({ _id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  const token = jwt.sign({ _id: user._id, username: user.username }, process.env.SECRET, { expiresIn: '2h' });
 
   return token;
 };

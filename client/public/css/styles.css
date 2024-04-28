@@ -1,6 +1,7 @@
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  font-family: Arial, sans-serif;  
+  background-color: #fff;
+  color: #333;
   margin: 0;
   padding: 0;
   display: flex;
@@ -79,4 +80,9 @@ input[type="submit"]:hover {
   text-decoration: underline;
   cursor: pointer;
   margin-right: 20px; /* Add some right margin */
+}
+
+body.dark-theme {
+  background-color: #333;
+  color: #fff;
 }
