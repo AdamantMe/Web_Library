@@ -1,7 +1,7 @@
 const postsRepository = require('../database/repos/postsRepository');
 
 const createPost = async (post) => {
-    if (!post.date || !post.title || !post.body || !post.uuid) {
+    if (!post.title || !post.author || !post.body || !post.uuid) {
         throw new Error('Missing required fields');
     }
     return await postsRepository.createPost(post);

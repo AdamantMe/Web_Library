@@ -1,10 +1,10 @@
 const db = require('../postgres');
 
 const createPost = async (post) => {
-  const { date, title, body, uuid } = post;
+  const { title, author, date, body, title_image, uuid } = post;
   const result = await db.query(
-    'INSERT INTO posts(date, title, body, uuid) VALUES($1, $2, $3, $4) RETURNING *',
-    [date, title, body, uuid]
+    'INSERT INTO posts(title, author, date, body, title_image, uuid) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
+    [title, author, date, body, title_image, uuid]
   );
   return result.rows[0];
 };
@@ -20,11 +20,11 @@ const getPostByUUID = async (uuid) => {
 };
 
 const updatePost = async (uuid, post) => {
-  const { title, body } = post; // Assuming only title and body are updated and date is set to current timestamp
+  const { title, author, body, title_image } = post;
   try {
     const result = await db.query(
-      'UPDATE posts SET date = NOW(), title = $1, body = $2 WHERE uuid = $3 RETURNING *',
-      [title, body, uuid]
+      'UPDATE posts SET title = $1, author = $2, body = $3, title_image = $4 WHERE uuid = $5 RETURNING *',
+      [title, author, body, title_image, uuid]
     );
 
     if (result.rows.length === 0) {
@@ -34,7 +34,7 @@ const updatePost = async (uuid, post) => {
     return result.rows[0];
   } catch (error) {
     console.error('Update Post Error:', error);
-    throw error; // Rethrow to allow further handling if necessary
+    throw error;
   }
 };
 

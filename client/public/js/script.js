@@ -26,45 +26,40 @@ function submitPost(url, method, data) {
     const token = localStorage.getItem('token');
     fetch(API_BASE_URL + url, {
         method: method,
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
+        headers: getHeaders(),
         body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then(data => {
-        if (method === 'POST') {
-            addPostToDOM(data);
-        } else if (method === 'PUT') {
-            updatePostInDOM(data);
-        }
-    })
-    .catch(error => console.error('Error:', error));
+        .then(response => response.json())
+        .then(data => {
+            if (method === 'POST') {
+                addPostToDOM(data);
+            } else if (method === 'PUT') {
+                updatePostInDOM(data);
+            }
+        })
+        .catch(error => console.error('Error:', error));
 }
 
 function getPosts() {
-    
-    const token = localStorage.getItem('token');    
+
+    const token = localStorage.getItem('token');
     fetch(API_BASE_URL + '/posts', {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
+        headers: getHeaders()
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json(); 
-    })
-    .then(posts => {
-        const postsContainer = document.getElementById('posts');
-        postsContainer.innerHTML = ''; 
-        console.log(posts);
-        posts.forEach(post => {
-            addPostToDOM(post);
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(posts => {
+            const postsContainer = document.getElementById('posts');
+            postsContainer.innerHTML = '';
+
+            posts.forEach(post => {
+                addPostToDOM(post);
+            });
         });
-    });
 }
 
 function addPostToDOM(post) {
@@ -85,7 +80,6 @@ function addPostToDOM(post) {
 }
 
 function editPost(uuid, title, body) {
-    // Assuming you correctly find the postElement based on the uuid
     const postElement = document.querySelector(`.post[data-uuid="${uuid}"]`);
     const updateForm = postElement.querySelector('form');
 
@@ -97,7 +91,11 @@ function editPost(uuid, title, body) {
     // Display the form
     postElement.querySelector('.edit-form').style.display = 'block';
 
-    // Prevent the form from submitting normally
+    postElement.querySelector('.cancel').addEventListener('click', function (event) {
+        event.preventDefault();
+        cancelUpdate(uuid);
+    });
+
     updateForm.onsubmit = function (event) {
         event.preventDefault();
         submitPost('/posts/' + uuid, 'PUT', {
@@ -132,11 +130,24 @@ function updatePostInDOM(updatedPost) {
 }
 
 function deletePost(uuid) {
-    fetch(API_BASE_URL + '/posts/' + uuid, { method: 'DELETE' })
-        .then(() => {
-            getPosts(); // Refresh the list of posts
-        })
-        .catch(error => console.error('Error:', error));
+    const postElement = document.querySelector(`.post[data-uuid="${uuid}"]`);
+    let confirmDeleteButton = postElement.querySelector('.confirm-delete');
+    const cancelDeleteButton = postElement.querySelector('.cancel-delete');
+
+    const deletePostHandler = function () {
+        fetch(API_BASE_URL + '/posts/' + uuid, { method: 'DELETE', headers: getHeaders() })
+            .then(() => {
+                getPosts(); // Refresh the list of posts
+            })
+            .catch(error => console.error('Error:', error));
+    };
+
+    confirmDeleteButton.addEventListener('click', deletePostHandler);
+
+    cancelDeleteButton.addEventListener('click', function () {
+        // Remove the event listener from the "Yes" button when "No" is clicked
+        confirmDeleteButton.removeEventListener('click', deletePostHandler);
+    });
 }
 
 function refreshUserAndPosts() {
@@ -154,7 +165,7 @@ function refreshUserAndPosts() {
 
 window.onload = function () {
     if (!localStorage.getItem('token')) {
-        window.location.href = '/client/public/login.html';
+        window.location.href = '/client/public/home.html';
     }
 
     const token = localStorage.getItem('token');
@@ -169,7 +180,7 @@ window.onload = function () {
     document.getElementById('logout-button').addEventListener('click', function () {
         console.log('Logging out');
         localStorage.removeItem('token');
-        window.location.href = '/client/public/login.html';
+        window.location.href = '/client/public/home.html';
     });
 
     const theme = localStorage.getItem('theme');
@@ -188,3 +199,11 @@ window.onload = function () {
         }
     });
 };
+
+function getHeaders() {
+    const token = localStorage.getItem('token');
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+}
