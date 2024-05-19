@@ -1,20 +1,16 @@
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const { Pool } = require('pg');
+require('dotenv').config();
 
-let pool;
+const dbConfig = JSON.parse(process.env.POSTGRES);
 
-if (process.env.NODE_ENV === 'production') {
-    pool = new Pool({
-        connectionString: process.env.POSTGRES,
-        ssl: {
-            rejectUnauthorized: false
-        }
-    });
-} else {
-    pool = new Pool(JSON.parse(process.env.POSTGRES));
-}
+const pool = new Pool({
+  host: dbConfig.host,
+  port: dbConfig.port,
+  database: dbConfig.database,
+  user: dbConfig.user,
+  password: dbConfig.password
+});
 
 module.exports = {
-    query: (text, params) => pool.query(text, params),
+  query: (text, params) => pool.query(text, params),
 };
