@@ -24,10 +24,19 @@ function fetchAllBooks() {
     const searchQuery = document.getElementById('search-input').value.toLowerCase();
 
     fetch(`${API_BASE_URL}/books`, { headers: getHeaders() })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status === 401) {
+                alert('You need to log in to view this section.');
+                window.location.href = '/html/login.html';
+                return;
+            }
+            return response.json();
+        })
         .then(data => {
-            allBooks = data.filter(book => book.title.toLowerCase().includes(searchQuery));
-            filterBooks();
+            if (data) {
+                allBooks = data.filter(book => book.title.toLowerCase().includes(searchQuery));
+                filterBooks();
+            }
         })
         .catch(error => console.error('Error fetching books:', error));
 }
@@ -110,6 +119,11 @@ function updateBook(uuid, book) {
         body: JSON.stringify(book)
     })
         .then(response => {
+            if (response.status === 401) {
+                alert('You need to log in to update this book.');
+                window.location.href = '/html/login.html';
+                return;
+            }
             if (!response.ok) {
                 return response.json().then(errorData => {
                     throw new Error(errorData.message || 'Error updating book');

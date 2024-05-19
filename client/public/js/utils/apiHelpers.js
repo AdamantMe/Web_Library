@@ -1,4 +1,4 @@
-const API_BASE_URL = window.location.origin;
+const API_BASE_URL = window.location.origin + '/api';
 
 function getHeaders() {
     const token = localStorage.getItem('token');
