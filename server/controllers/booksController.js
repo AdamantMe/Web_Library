@@ -52,9 +52,11 @@ const getLatestAdditions = async (req, res) => {
     console.log("ASDASD1");
     res.status(200).send(books);
   } catch (error) {
+    console.error('Error in getLatestAdditions:', error);
     res.status(500).send(error.message);
   }
 };
+
 
 const getLatestReleases = async (req, res) => {
   try {
