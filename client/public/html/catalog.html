@@ -27,6 +27,7 @@
                         <th>Title</th>
                         <th>Author</th>
                         <th>Release Date</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="catalog-list"></tbody>
@@ -47,6 +48,15 @@
                 };
                 document.body.appendChild(script);
             });
+    </script>
+    <script>
+        const token = localStorage.getItem('token');
+        const isLoggedIn = !!token;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventListeners(isLoggedIn);
+            fetchAllBooks(isLoggedIn);
+        });
     </script>
 </body>
 

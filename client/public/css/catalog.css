@@ -205,3 +205,8 @@ body.dark-theme .book-cover {
     color: white;
     cursor: default;
 }
+
+[contenteditable="true"] {
+    background-color: #eef;
+    border: 1px dashed #ccc;
+}

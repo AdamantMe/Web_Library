@@ -1,11 +1,10 @@
 function initializeHeader() {
-    console.log("ASD");
     const currentPath = window.location.pathname.split('/').pop();
-    
+
     const homeButton = document.getElementById('home-button');
     const catalogButton = document.getElementById('catalog-button');
-    
-    // Enable all buttons by default
+    const loginRegisterButton = document.getElementById('login-button');
+
     homeButton.disabled = false;
     catalogButton.disabled = false;
 
@@ -35,8 +34,21 @@ function initializeHeader() {
         darkModeToggle.textContent = document.body.classList.contains('dark-theme') ? 'Light Mode' : 'Dark Mode';
     });
 
-    // Check dark mode state on load
     darkModeToggle.textContent = document.body.classList.contains('dark-theme') ? 'Light Mode' : 'Dark Mode';
+
+    const token = localStorage.getItem('token');
+    if (token) {
+        loginRegisterButton.textContent = 'Logout';
+        loginRegisterButton.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            window.location.reload();
+        });
+    } else {
+        loginRegisterButton.addEventListener('click', () => {
+            window.location.href = '/client/public/html/login.html';
+        });
+    }
 }
 
 initializeHeader();
