@@ -47,7 +47,9 @@ const deleteBook = async (req, res) => {
 
 const getLatestAdditions = async (req, res) => {
   try {
+    console.log("ASDASD");
     const books = await booksService.getLatestAdditions();
+    console.log("ASDASD1");
     res.status(200).send(books);
   } catch (error) {
     res.status(500).send(error.message);
