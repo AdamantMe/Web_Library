@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5500';
+const BASE_URL = window.location.origin;
 
 document.getElementById('registerForm').addEventListener('submit', function (event) {
     event.preventDefault();
@@ -25,7 +25,7 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
         if (data.success) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('username', username);
-            window.location.href = '/client/public/html/catalog.html';
+            window.location.href = '/html/catalog.html';
         } else {
             alert('Login failed: ' + data.message);
         }
@@ -47,7 +47,7 @@ function submitUser(url, user) {
         if (response.ok) {
             return response.json();
         } else if (response.status === 401) {
-            window.location.href = '/client/public/html/login.html';
+            window.location.href = '/html/login.html';
         } else {
             console.log(response);
             throw new Error('Server response was not ok.');
@@ -58,7 +58,7 @@ function submitUser(url, user) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('id', data.user.id);
             localStorage.setItem('username', data.user.username);
-            window.location.href = '/client/public/html/catalog.html';
+            window.location.href = '/html/catalog.html';
         } else {
             console.error('Error:', data.message);
         }

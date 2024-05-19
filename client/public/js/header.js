@@ -14,7 +14,7 @@ function initializeHeader() {
     } else {
         homeButton.classList.remove('disabled-button');
         homeButton.addEventListener('click', () => {
-            window.location.href = '/client/public/home.html';
+            window.location.href = '/home.html';
         });
     }
 
@@ -24,7 +24,7 @@ function initializeHeader() {
     } else {
         catalogButton.classList.remove('disabled-button');
         catalogButton.addEventListener('click', () => {
-            window.location.href = '/client/public/html/catalog.html';
+            window.location.href = '/html/catalog.html';
         });
     }
 
@@ -46,7 +46,7 @@ function initializeHeader() {
         });
     } else {
         loginRegisterButton.addEventListener('click', () => {
-            window.location.href = '/client/public/html/login.html';
+            window.location.href = '/html/login.html';
         });
     }
 }
