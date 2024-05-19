@@ -4,36 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Blog Post Manager</title>
+    <title>Home - Book Library</title>
     <link rel="stylesheet" href="css/home.css">
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.x.x/dist/cdn.min.js" defer></script>
 </head>
 
 <body x-data="{ darkMode: false }" :class="darkMode ? 'dark-theme' : ''">
-    <header class="header">
-        <button onclick="window.location.href='home.html'" class="home-button">Home</button>
-        <nav class="navbar">
-            <a href="html/posts.html">Posts</a>
-            <a href="html/books.html">Books</a>
-            <a href="html/about.html">About</a>
-        </nav>
-        <div id="user-info">
-            <button @click="darkMode = !darkMode" id="dark-mode-toggle" x-text="darkMode ? 'Light Mode' : 'Dark Mode'">Dark Mode</button>
-            <button onclick="window.location.href='html/login.html'" id="login-button">Login/Register</button>
-        </div>
-    </header>
+    <div id="header-placeholder"></div>
     <main class="container">
         <section class="group">
-            <h2>Recent Posts</h2>
-            <div id="posts" class="items"></div>
+            <h2>Latest Additions</h2>
+            <div id="latest-additions" class="items"></div>
         </section>
         <section class="group">
-            <h2>Recent Books</h2>
-            <div id="books" class="items"></div>
+            <h2>Latest Releases</h2>
+            <div id="latest-releases" class="items"></div>
+        </section>
+        <section class="group">
+            <h2>A-Z</h2>
+            <div id="a-to-z" class="items"></div>
         </section>
     </main>
     <script src="js/utils/apiHelpers.js" type="module"></script>
     <script src="js/home.js" type="module"></script>
+    <script>
+        fetch('html/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                // Run the script after header is loaded
+                const script = document.createElement('script');
+                script.src = 'js/header.js';
+                document.body.appendChild(script);
+            });
+    </script>
 </body>
 
 </html>

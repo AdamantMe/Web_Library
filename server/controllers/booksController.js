@@ -45,10 +45,40 @@ const deleteBook = async (req, res) => {
   }
 };
 
+const getLatestAdditions = async (req, res) => {
+  try {
+    const books = await booksService.getLatestAdditions();
+    res.status(200).send(books);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+const getLatestReleases = async (req, res) => {
+  try {
+    const books = await booksService.getLatestReleases();
+    res.status(200).send(books);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+const getBooksByAlphabet = async (req, res) => {
+  try {
+    const books = await booksService.getBooksByAlphabet();
+    res.status(200).send(books);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
 module.exports = {
   createBook,
   getAllBooks,
   getBookByUUID,
   updateBook,
   deleteBook,
+  getLatestAdditions,
+  getLatestReleases,
+  getBooksByAlphabet,
 };

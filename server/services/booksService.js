@@ -1,7 +1,7 @@
 const booksRepository = require('../database/repos/booksRepository');
 
 const createBook = async (book) => {
-    if (!book.title || !book.author || !book.uuid) {
+    if (!book.title || !book.author) {
         throw new Error('Missing required fields');
     }
     return await booksRepository.createBook(book);
@@ -25,7 +25,7 @@ const updateBook = async (uuid, bookUpdates) => {
         throw new Error('Book not found');
     }
     return await booksRepository.updateBook(uuid, bookUpdates);
-};  
+};
 
 const deleteBook = async (uuid) => {
     const bookToDelete = await booksRepository.getBookByUUID(uuid);
@@ -35,10 +35,25 @@ const deleteBook = async (uuid) => {
     return await booksRepository.deleteBook(uuid);
 };
 
+const getLatestAdditions = async () => {
+    return await booksRepository.getLatestAdditions();
+};
+
+const getLatestReleases = async () => {
+    return await booksRepository.getLatestReleases();
+};
+
+const getBooksByAlphabet = async () => {
+    return await booksRepository.getBooksByAlphabet();
+};
+
 module.exports = {
     createBook,
     getAllBooks,
     getBookByUUID,
     updateBook,
     deleteBook,
+    getLatestAdditions,
+    getLatestReleases,
+    getBooksByAlphabet,
 };

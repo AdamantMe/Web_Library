@@ -36,10 +36,31 @@ const deleteBook = async (uuid) => {
   return result.rows[0];
 };
 
+const getLatestAdditions = async () => {
+  const query = 'SELECT * FROM books ORDER BY created_at DESC LIMIT 5';
+  const result = await db.query(query);
+  return result.rows;
+};
+
+const getLatestReleases = async () => {
+  const query = 'SELECT * FROM books ORDER BY release_date DESC LIMIT 5';
+  const result = await db.query(query);
+  return result.rows;
+};
+
+const getBooksByAlphabet = async () => {
+  const query = 'SELECT * FROM books ORDER BY title ASC LIMIT 5';
+  const result = await db.query(query);
+  return result.rows;
+};
+
 module.exports = {
   createBook,
   getAllBooks,
   getBookByUUID,
   updateBook,
   deleteBook,
+  getLatestAdditions,
+  getLatestReleases,
+  getBooksByAlphabet,
 };

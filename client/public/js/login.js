@@ -12,7 +12,7 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
 
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
-    // Send a request to your server with the entered username and password
+    
     fetch(`${BASE_URL}/login`, {
         method: 'POST',
         headers: {
@@ -22,13 +22,11 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
     })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                // If the login was successful, store the token and redirect to the posts page
+            if (data.success) {                
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('username', username);
                 window.location.href = '/client/public/html/index.html';
             } else {
-                // If the login failed, display an error message
                 alert('Login failed: ' + data.message);
             }
         })
