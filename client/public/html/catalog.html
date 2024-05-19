@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalog - Book Library</title>
-    <link rel="stylesheet" href="../css/catalog.css">
+    <link rel="stylesheet" href="/css/catalog.css">
 </head>
 
 <body class="">
@@ -13,7 +13,7 @@
     <main class="container">
         <div class="search-filter">
             <input type="text" id="search-input" placeholder="Search by title" class="search-input">
-            <img id="search-button" src="../resources/searchIcon.svg" alt="Search Icon" class="search-icon">
+            <img id="search-button" src="/resources/searchIcon.svg" alt="Search Icon" class="search-icon">
             <div class="year-filter">
                 <input type="number" id="year-start" placeholder="From year" min="1800" max="2024" class="year-input">
                 <input type="number" id="year-end" placeholder="To year" min="1800" max="2024" class="year-input">
@@ -34,15 +34,15 @@
             </table>
         </div>
     </main>
-    <script src="../js/utils/apiHelpers.js" type="module"></script>
-    <script src="../js/catalog.js" type="module"></script>
+    <script src="/js/utils/apiHelpers.js" type="module"></script>
+    <script src="/js/catalog.js" type="module"></script>
     <script>
         fetch('/header.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header-placeholder').innerHTML = data;
                 const script = document.createElement('script');
-                script.src = '/client/public/js/header.js';
+                script.src = '/js/header.js';
                 script.onload = () => {
                     initializeHeader();
                 };
