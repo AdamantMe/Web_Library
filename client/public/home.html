@@ -28,7 +28,7 @@
     <script src="js/utils/apiHelpers.js" type="module"></script>
     <script src="js/home.js" type="module"></script>
     <script>
-        fetch('html/header.html')
+        fetch('/html/header.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header-placeholder').innerHTML = data;
