@@ -1,4 +1,4 @@
-import { API_BASE_URL } from './utils/apiHelpers.js';
+const API_BASE_URL = window.location.origin + '/api';
 
 document.getElementById('registerForm').addEventListener('submit', function (event) {
     event.preventDefault();
@@ -20,19 +20,19 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
         },
         body: JSON.stringify({ username, password }),
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('username', username);
-                window.location.href = '/html/catalog.html';
-            } else {
-                alert('Login failed: ' + data.message);
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('username', username);
+            window.location.href = '/catalog.html';
+        } else {
+            alert('Login failed: ' + data.message);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 });
 
 function submitUser(url, user) {
@@ -43,25 +43,25 @@ function submitUser(url, user) {
         },
         body: JSON.stringify(user)
     })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else if (response.status === 401) {
-                window.location.href = '/html/login.html';
-            } else {
-                console.log(response);
-                throw new Error('Server response was not ok.');
-            }
-        })
-        .then(data => {
-            if (data) {
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('id', data.user.id);
-                localStorage.setItem('username', data.user.username);
-                window.location.href = '/html/catalog.html';
-            } else {
-                console.error('Error:', data.message);
-            }
-        })
-        .catch(error => console.error('Error:', error));
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else if (response.status === 401) {
+            window.location.href = '/login.html';
+        } else {
+            console.log(response);
+            throw new Error('Server response was not ok.');
+        }
+    })
+    .then(data => {
+        if (data) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('id', data.user.id);
+            localStorage.setItem('username', data.user.username);
+            window.location.href = '/catalog.html';
+        } else {
+            console.error('Error:', data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }
