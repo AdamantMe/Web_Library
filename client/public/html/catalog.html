@@ -49,14 +49,6 @@
                 document.body.appendChild(script);
             });
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const token = localStorage.getItem('token');
-            const isLoggedIn = !!token;
-            initializeEventListeners(isLoggedIn);
-            fetchAllBooks(isLoggedIn);
-        });
-    </script>
 </body>
 
 </html>
