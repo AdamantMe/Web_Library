@@ -50,10 +50,9 @@
             });
     </script>
     <script>
-        const token = localStorage.getItem('token');
-        const isLoggedIn = !!token;
-
         document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            const isLoggedIn = !!token;
             initializeEventListeners(isLoggedIn);
             fetchAllBooks(isLoggedIn);
         });
