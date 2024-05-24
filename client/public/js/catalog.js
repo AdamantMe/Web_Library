@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
             genre: document.getElementById('add-genre').value,
             pages: document.getElementById('add-pages').value,
             title_image: document.getElementById('add-title-image').value,
-            release_date: new Date(document.getElementById('add-release-date').value).toISOString()
+            release_date: document.getElementById('add-release-date').value // Correct date format
         };
 
         if (!validateBookData(newBook)) {

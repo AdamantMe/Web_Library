@@ -17,6 +17,7 @@
             <div class="year-filter">
                 <input type="number" id="year-start" placeholder="From year" min="1800" max="2024" class="year-input">
                 <input type="number" id="year-end" placeholder="To year" min="1800" max="2024" class="year-input">
+                ${isLoggedIn ? '<button id="add-book-button">Add Book</button>' : ''}
             </div>
         </div>
         <div class="items">
@@ -33,7 +34,6 @@
                 <tbody id="catalog-list"></tbody>
             </table>
         </div>
-        <button id="add-book-button" style="display: none;">Add Book</button>
     </main>
 
     <div id="add-book-modal" class="modal">

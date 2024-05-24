@@ -1,9 +1,9 @@
 const db = require('../postgres');
 
 const createBook = async (book) => {
-  const { title, author, genre, pages, title_image } = book;
-  const query = 'INSERT INTO books (title, author, genre, pages, title_image) VALUES ($1, $2, $3, $4, $5) RETURNING *';
-  const values = [title, author, genre, pages, title_image];
+  const { title, author, genre, pages, title_image, release_date } = book;
+  const query = 'INSERT INTO books (title, author, genre, pages, title_image, release_date) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
+  const values = [title, author, genre, pages, title_image, release_date];
   const result = await db.query(query, values);
   return result.rows[0];
 };
@@ -22,9 +22,9 @@ const getBookByUUID = async (uuid) => {
 };
 
 const updateBook = async (uuid, bookUpdates) => {
-  const { title, author, genre, pages, title_image } = bookUpdates;
-  const query = 'UPDATE books SET title = $1, author = $2, genre = $3, pages = $4, title_image = $5 WHERE uuid = $6 RETURNING *';
-  const values = [title, author, genre, pages, title_image, uuid];
+  const { title, author, genre, pages, title_image, release_date } = bookUpdates;
+  const query = 'UPDATE books SET title = $1, author = $2, genre = $3, pages = $4, title_image = $5, release_date = $6 WHERE uuid = $7 RETURNING *';
+  const values = [title, author, genre, pages, title_image, release_date, uuid];
   const result = await db.query(query, values);
   return result.rows[0];
 };

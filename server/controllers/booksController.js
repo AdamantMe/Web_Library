@@ -2,10 +2,18 @@ const booksService = require('../services/booksService');
 
 const createBook = async (req, res) => {
   try {
-    const book = await booksService.createBook(req.body);
-    res.status(201).json({ success: true, book });
+    const bookData = req.body;
+    if (!bookData.release_date) {
+      bookData.release_date = new Date().toISOString();
+    } else {
+      bookData.release_date = new Date(bookData.release_date).toISOString();
+    }
+
+    const book = await booksService.createBook(bookData);
+    res.status(201).send({ success: true, message: 'Book created', book });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    console.error('Error creating book:', error);
+    res.status(400).send({ success: false, message: error.message });
   }
 };
 
@@ -29,10 +37,16 @@ const getBookByUUID = async (req, res) => {
 
 const updateBook = async (req, res) => {
   try {
-    const updatedBook = await booksService.updateBook(req.params.uuid, req.body);
-    res.status(200).send(updatedBook);
+    const bookData = req.body;
+    if (bookData.release_date) {
+      bookData.release_date = new Date(bookData.release_date).toISOString();
+    }
+
+    const updatedBook = await booksService.updateBook(req.params.uuid, bookData);
+    res.status(200).send({ success: true, message: 'Book updated', book: updatedBook });
   } catch (error) {
-    res.status(404).send(error.message);
+    console.error('Error updating book:', error);
+    res.status(404).send({ success: false, message: error.message });
   }
 };
 
