@@ -168,23 +168,34 @@ function deleteBook(uuid) {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
     })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(errorData => {
-                    throw new Error(errorData.message || 'Error deleting book');
-                });
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw new Error(errorData.message || 'Error deleting book');
+            });
+        }
+        return response.text();
+    })
+    .then(text => {
+        if (text) {
+            try {
+                const data = JSON.parse(text);
+                if (!data.success) {
+                    throw new Error(data.message || 'Error deleting book');
+                }
+            } catch (e) {
+                console.error('Error parsing response:', e);
+                throw new Error('Unexpected response format');
             }
-            return response.json();
-        })
-        .then(data => {
-            alert('Book deleted successfully');
-            allBooks = allBooks.filter(book => book.uuid !== uuid);
-            filterBooks();
-        })
-        .catch(error => {
-            console.error('Error deleting book:', error);
-            alert('Error deleting book: ' + error.message);
-        });
+        }
+        alert('Book deleted successfully');
+        allBooks = allBooks.filter(book => book.uuid !== uuid);
+        filterBooks();
+    })
+    .catch(error => {
+        console.error('Error deleting book:', error);
+        alert('Error deleting book: ' + error.message);
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -249,10 +260,14 @@ function addBook(book) {
             return response.json();
         })
         .then(data => {
-            alert('Book added successfully');
-            allBooks.push(data);
-            filterBooks();
-            document.getElementById('add-book-modal').style.display = 'none';
+            if (data && data.uuid) {
+                alert('Book added successfully');
+                allBooks.push(data);
+                filterBooks();
+                document.getElementById('add-book-modal').style.display = 'none';
+            } else {
+                alert('Error adding book: Unexpected response');
+            }
         })
         .catch(error => {
             console.error('Error adding book:', error);

@@ -3,9 +3,9 @@ const booksService = require('../services/booksService');
 const createBook = async (req, res) => {
   try {
     const book = await booksService.createBook(req.body);
-    res.status(201).send({ message: 'Book created', book });
+    res.status(201).json({ success: true, book });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 
