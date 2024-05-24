@@ -25,6 +25,19 @@
             <div id="a-to-z" class="items"></div>
         </section>
     </main>
+    
+    <div id="book-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modal-title"></h2>
+            <img id="modal-cover" alt="Book Cover">
+            <p><strong>Author:</strong> <span id="modal-author"></span></p>
+            <p><strong>Genre:</strong> <span id="modal-genre"></span></p>
+            <p><strong>Pages:</strong> <span id="modal-pages"></span></p>
+            <p><strong>Release Date:</strong> <span id="modal-release-date"></span></p>
+        </div>
+    </div>
+
     <script src="/js/utils/apiHelpers.js" type="module"></script>
     <script src="/js/home.js" type="module"></script>
     <script>
@@ -32,7 +45,7 @@
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header-placeholder').innerHTML = data;
-                
+
                 const script = document.createElement('script');
                 script.src = '/js/header.js';
                 document.body.appendChild(script);
