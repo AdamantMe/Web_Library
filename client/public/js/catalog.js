@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
     isLoggedIn = !!localStorage.getItem('token');
     initializeEventListeners();
     fetchAllBooks();
-    toggleAddBookButton();
 });
 
 function initializeEventListeners() {
@@ -22,15 +21,6 @@ function initializeEventListeners() {
 
     if (isLoggedIn) {
         document.getElementById('add-book-button').addEventListener('click', openAddBookModal);
-    }
-}
-
-function toggleAddBookButton() {
-    const addBookButton = document.getElementById('add-book-button');
-    if (isLoggedIn) {
-        addBookButton.style.display = 'block';
-    } else {
-        addBookButton.style.display = 'none';
     }
 }
 
@@ -168,34 +158,23 @@ function deleteBook(uuid) {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
     })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(errorData => {
-                throw new Error(errorData.message || 'Error deleting book');
-            });
-        }
-        return response.text();
-    })
-    .then(text => {
-        if (text) {
-            try {
-                const data = JSON.parse(text);
-                if (!data.success) {
-                    throw new Error(data.message || 'Error deleting book');
-                }
-            } catch (e) {
-                console.error('Error parsing response:', e);
-                throw new Error('Unexpected response format');
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(errorData => {
+                    throw new Error(errorData.message || 'Error deleting book');
+                });
             }
-        }
-        alert('Book deleted successfully');
-        allBooks = allBooks.filter(book => book.uuid !== uuid);
-        filterBooks();
-    })
-    .catch(error => {
-        console.error('Error deleting book:', error);
-        alert('Error deleting book: ' + error.message);
-    });
+            return response.text();
+        })
+        .then(() => {
+            alert('Book deleted successfully');
+            allBooks = allBooks.filter(book => book.uuid !== uuid);
+            filterBooks();
+        })
+        .catch(error => {
+            console.error('Error deleting book:', error);
+            alert('Error deleting book: ' + error.message);
+        });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -225,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
             genre: document.getElementById('add-genre').value,
             pages: document.getElementById('add-pages').value,
             title_image: document.getElementById('add-title-image').value,
-            release_date: document.getElementById('add-release-date').value // Correct date format
+            release_date: new Date(document.getElementById('add-release-date').value).toISOString()
         };
 
         if (!validateBookData(newBook)) {
@@ -260,14 +239,10 @@ function addBook(book) {
             return response.json();
         })
         .then(data => {
-            if (data && data.uuid) {
-                alert('Book added successfully');
-                allBooks.push(data);
-                filterBooks();
-                document.getElementById('add-book-modal').style.display = 'none';
-            } else {
-                alert('Error adding book: Unexpected response');
-            }
+            alert('Book added successfully');
+            allBooks.push(data);
+            filterBooks();
+            document.getElementById('add-book-modal').style.display = 'none';
         })
         .catch(error => {
             console.error('Error adding book:', error);

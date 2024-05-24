@@ -17,8 +17,8 @@
             <div class="year-filter">
                 <input type="number" id="year-start" placeholder="From year" min="1800" max="2024" class="year-input">
                 <input type="number" id="year-end" placeholder="To year" min="1800" max="2024" class="year-input">
-                ${isLoggedIn ? '<button id="add-book-button">Add Book</button>' : ''}
             </div>
+            <button id="add-book-button" style="display: none;">Add Book</button>
         </div>
         <div class="items">
             <table>
@@ -75,6 +75,9 @@
                 script.src = '/js/header.js';
                 script.onload = () => {
                     initializeHeader();
+                    if (localStorage.getItem('token')) {
+                        document.getElementById('add-book-button').style.display = 'block';
+                    }
                 };
                 document.body.appendChild(script);
             });

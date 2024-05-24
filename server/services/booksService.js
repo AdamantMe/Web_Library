@@ -9,6 +9,12 @@ const createBook = async (book) => {
     } else {
         book.release_date = new Date(book.release_date).toISOString();
     }
+
+    const isDuplicate = await booksRepository.checkDuplicateBook(book.title, book.author);
+    if (isDuplicate) {
+        throw new Error('A book with this title and author already exists');
+    }
+
     return await booksRepository.createBook(book);
 };
 
@@ -24,15 +30,14 @@ const getBookByUUID = async (uuid) => {
     return book;
 };
 
-const updateBook = async (uuid, bookUpdates) => {
-    const existingBook = await booksRepository.getBookByUUID(uuid);
-    if (!existingBook) {
-        throw new Error('Book not found');
+const updateBook = async (uuid, book) => {
+    if (!book.title || !book.author) {
+        throw new Error('Missing required fields');
     }
-    if (bookUpdates.release_date) {
-        bookUpdates.release_date = new Date(bookUpdates.release_date).toISOString();
+    if (book.release_date) {
+        book.release_date = new Date(book.release_date).toISOString();
     }
-    return await booksRepository.updateBook(uuid, bookUpdates);
+    return await booksRepository.updateBook(uuid, book);
 };
 
 const deleteBook = async (uuid) => {
