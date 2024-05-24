@@ -240,8 +240,7 @@ function addBook(book) {
         })
         .then(data => {
             alert('Book added successfully');
-            allBooks.push(data);
-            filterBooks();
+            fetchAllBooks();
             document.getElementById('add-book-modal').style.display = 'none';
         })
         .catch(error => {
@@ -251,5 +250,6 @@ function addBook(book) {
 }
 
 function truncateText(text, maxLength) {
+    if (!text) return '';
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
 }
