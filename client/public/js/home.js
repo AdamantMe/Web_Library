@@ -20,20 +20,21 @@ function fetchBooksForSection(section, endpoint) {
             const bookElement = document.createElement('div');
             bookElement.className = 'item';
             const uniqueParam = new Date().getTime() + index;
+            const imageUrl = `${book.title_image}?random=${uniqueParam}`;
             bookElement.innerHTML = `
-                <img src="${book.title_image}?random=${uniqueParam}" alt="${book.title}">
+                <img src="${imageUrl}" alt="${book.title}">
                 <h3>${book.title}</h3>
             `;
-            bookElement.addEventListener('click', () => openModal(book));
+            bookElement.addEventListener('click', () => openModal(book, imageUrl));
             sectionList.appendChild(bookElement);
         });
     })
     .catch(error => console.error('Error loading books:', error));
 }
 
-function openModal(book) {
+function openModal(book, imageUrl) {
     document.getElementById('modal-title').textContent = book.title;
-    document.getElementById('modal-cover').src = book.title_image;
+    document.getElementById('modal-cover').src = imageUrl;
     document.getElementById('modal-author').textContent = book.author;
     document.getElementById('modal-genre').textContent = book.genre;
     document.getElementById('modal-pages').textContent = book.pages;

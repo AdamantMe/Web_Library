@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     isLoggedIn = !!localStorage.getItem('token');
     initializeEventListeners();
     fetchAllBooks();
+    toggleAddBookButton();
 });
 
 function initializeEventListeners() {
@@ -18,6 +19,19 @@ function initializeEventListeners() {
     });
     document.getElementById('year-start').addEventListener('input', filterBooks);
     document.getElementById('year-end').addEventListener('input', filterBooks);
+
+    if (isLoggedIn) {
+        document.getElementById('add-book-button').addEventListener('click', openAddBookModal);
+    }
+}
+
+function toggleAddBookButton() {
+    const addBookButton = document.getElementById('add-book-button');
+    if (isLoggedIn) {
+        addBookButton.style.display = 'block';
+    } else {
+        addBookButton.style.display = 'none';
+    }
 }
 
 function fetchAllBooks() {
@@ -65,7 +79,11 @@ function displayBooks(books) {
             <td contenteditable="${isLoggedIn}">${truncateText(book.title, 30)}</td>
             <td contenteditable="${isLoggedIn}">${truncateText(book.author, 30)}</td>
             <td contenteditable="${isLoggedIn}">${new Date(book.release_date).toDateString()}</td>
-            ${isLoggedIn ? '<td><button class="save-button" data-uuid="' + book.uuid + '">Save</button></td>' : ''}
+            ${isLoggedIn ? `
+            <td>
+                <button class="save-button" data-uuid="${book.uuid}">Save</button>
+                <button class="delete-button" data-uuid="${book.uuid}">Delete</button>
+            </td>` : ''}
         `;
         catalogList.appendChild(bookElement);
     });
@@ -88,6 +106,13 @@ function displayBooks(books) {
                 }
 
                 updateBook(bookUUID, updatedBook);
+            });
+        });
+
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const bookUUID = this.getAttribute('data-uuid');
+                deleteBook(bookUUID);
             });
         });
     }
@@ -132,6 +157,106 @@ function updateBook(uuid, book) {
         .catch(error => {
             console.error('Error updating book:', error);
             alert('Error updating book: ' + error.message);
+        });
+}
+
+function deleteBook(uuid) {
+    fetch(`${API_BASE_URL}/books/${uuid}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || 'Error deleting book');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Book deleted successfully');
+            allBooks = allBooks.filter(book => book.uuid !== uuid);
+            filterBooks();
+        })
+        .catch(error => {
+            console.error('Error deleting book:', error);
+            alert('Error deleting book: ' + error.message);
+        });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    isLoggedIn = !!localStorage.getItem('token');
+    initializeEventListeners();
+    fetchAllBooks();
+
+    // Initialize add book modal
+    const addBookModal = document.getElementById('add-book-modal');
+    const closeButton = addBookModal.querySelector('.close-button');
+
+    closeButton.onclick = function () {
+        addBookModal.style.display = 'none';
+    }
+
+    window.onclick = function (event) {
+        if (event.target == addBookModal) {
+            addBookModal.style.display = 'none';
+        }
+    }
+
+    document.getElementById('add-book-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const newBook = {
+            title: document.getElementById('add-title').value,
+            author: document.getElementById('add-author').value,
+            genre: document.getElementById('add-genre').value,
+            pages: document.getElementById('add-pages').value,
+            title_image: document.getElementById('add-title-image').value,
+            release_date: new Date(document.getElementById('add-release-date').value).toISOString()
+        };
+
+        if (!validateBookData(newBook)) {
+            alert('Invalid book data. Please check your input.');
+            return;
+        }
+
+        addBook(newBook);
+    });
+});
+
+function openAddBookModal() {
+    const addBookModal = document.getElementById('add-book-modal');
+    addBookModal.style.display = 'block';
+}
+
+function addBook(book) {
+    fetch(`${API_BASE_URL}/books`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(book)
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || 'Error adding book');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Book added successfully');
+            allBooks.push(data);
+            filterBooks();
+            document.getElementById('add-book-modal').style.display = 'none';
+        })
+        .catch(error => {
+            console.error('Error adding book:', error);
+            alert('Error adding book: ' + error.message);
         });
 }
 

@@ -33,7 +33,37 @@
                 <tbody id="catalog-list"></tbody>
             </table>
         </div>
+        <button id="add-book-button" style="display: none;">Add Book</button>
     </main>
+
+    <div id="add-book-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Add New Book</h2>
+            <form id="add-book-form">
+                <label for="add-title">Title:</label>
+                <input type="text" id="add-title" name="title" required>
+
+                <label for="add-author">Author:</label>
+                <input type="text" id="add-author" name="author" required>
+
+                <label for="add-genre">Genre:</label>
+                <input type="text" id="add-genre" name="genre">
+
+                <label for="add-pages">Pages:</label>
+                <input type="number" id="add-pages" name="pages">
+
+                <label for="add-title-image">Title Image URL:</label>
+                <input type="text" id="add-title-image" name="title_image">
+
+                <label for="add-release-date">Release Date:</label>
+                <input type="date" id="add-release-date" name="release_date" required>
+
+                <button type="submit">Add Book</button>
+            </form>
+        </div>
+    </div>
+
     <script src="/js/utils/apiHelpers.js" type="module"></script>
     <script src="/js/catalog.js" type="module"></script>
     <script>
