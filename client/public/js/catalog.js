@@ -133,11 +133,11 @@ function updateBook(uuid, book) {
             return response.json();
         })
         .then(data => {
-            if (data && data.uuid === uuid) {
+            if (data && data.success) {
                 alert('Book updated successfully');
                 const index = allBooks.findIndex(b => b.uuid === uuid);
                 if (index !== -1) {
-                    allBooks[index] = data;
+                    allBooks[index] = data.book;
                 }
                 filterBooks();
             } else {
