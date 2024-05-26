@@ -70,6 +70,8 @@ Access the live application at [weblibrary.onrender.com](https://weblibrary.onre
 - **Edit Books**: Logged-in librarians can click on book details to edit them directly.
 - **Delete Books**: Logged-in librarians can delete books using the "Delete" button next to each book.
 
+**Note:** The cover images for books are auto-generated each time using the link `https://picsum.photos/200/300` as this is a demo website. When adding a new book, a cover image URL can be provided.
+
 ## Authorization Middleware
 While the `authorize.js` middleware is included to handle JWT-based user authentication, it is not actively used in the final implementation. User permissions are managed through different logic in the application.
 
