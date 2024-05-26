@@ -4,7 +4,6 @@ const express = require('express');
 const app = express();
 const loginRouter = require('./routes/loginRoutes');
 const registerRouter = require('./routes/registerRoutes');
-const postRoutes = require('./routes/postsRoutes');
 const booksRoutes = require('./routes/booksRoutes');
 const authorize = require('./middleware/authorize');
 
@@ -25,7 +24,6 @@ app.get('/', function(req, res) {
 // Define routes with /api prefix
 app.use('/api/login', loginRouter);
 app.use('/api/register', registerRouter);
-app.use('/api/posts', postRoutes);
 app.use('/api/books', booksRoutes);
 
 // Error handling middleware
