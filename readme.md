@@ -3,6 +3,9 @@
 ## Overview
 This project is a web application that serves as a book library catalog. It allows users to browse books and manage the library's collection. The application features a REST API backend and a dynamic frontend interface.
 
+## Repository
+Access the source code on GitHub: [Web Library Repository](https://github.com/AdamantMe/Web_Library).
+
 ## Features
 - **Public Access**: Explore the library's collection without logging in.
 - **User Authentication**: Log in as a librarian to manage the book collection.
